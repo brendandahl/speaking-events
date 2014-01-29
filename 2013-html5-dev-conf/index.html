@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>PDF.js - Firefox’s HTML5 PDF Viewer</title>
+
+		<meta name="description" content="HTML5 Dev Conf 2013 Presentation">
+		<meta name="author" content="Brendan Dahl">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/mine.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<style type="text/css">
+			.layout div {
+				border-radius: 15px;
+				border: 1px solid #CCC;
+				margin: 2px;
+				padding: 2px;
+			}
+		</style>
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section>
+					<img src="assets/logo.svg" style="border: 0 none; box-shadow: none;" alt="PDF.js" width="400">
+					<p>
+						<small>Presented by</small>
+						<small><a href="http://b10l.com">Brendan Dahl</a></small>
+					</p>
+					<h2>HTML5 Dev Conf 2013</h2>
+					<aside class="notes">
+						Phone off<br>
+						Drinks some water
+						<ol>
+							<li>self introduction</li>
+							<li>creation and evolution of pdf.js</li>
+							<li>what we do and issues along the way</li>
+						</ol>
+					</aside>
+				</section>
+
+				<section>
+					<section>
+						<h1>1991</h1>
+						<h2>camelot is introduced</h2>
+						<aside class="notes">
+							<ol>
+								<li>first learn about origins</li>
+								<li>format based on postscript</li>
+								<li>never met anyone who write in PS still</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h2>clean elegant format</h2>
+						<aside class="notes">
+							<ol>
+								<li>simple structure of data different data types</li>
+								<li>relatively simple way of describing how things are drawn</li>
+								<li>like many things it got lots of additions over the years</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<img src="assets/spoiler.jpg">
+					</section>
+					<section>
+						<h2>the unexpected</h2>
+						3D modeling, video, audio, attachments, <strong>flash!</strong>, <strong>javascript!</strong>
+						<aside class="notes">
+							Lots of things I never knew about.
+						</aside>
+					</section>
+					<section>
+						<h1>2008</h1>
+						<h2>PDF becomes an ISO standard</h2>
+						<aside class="notes">
+							<ol>
+								<li>750 pages</li>
+								<li>really a spec of specs</li>
+							</ol>
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>what's inside a PDF?</h1>
+						<aside class="notes">
+						</aside>
+					</section>
+					<section>
+						<h3>file layout</h3>
+						<div class="layout">
+							<div>Header<pre><code>%PDF-1.7</code></pre></div>
+							<div>Body<pre><code>2 0 obj
+<<
+  /Type /Pages</code></pre></div>
+							<div>xref Table<pre><code>xref
+0 6
+0000000000 65535 f</code></pre></div>
+							<div>Trailer<pre><code>trailer
+<<
+  /Size 6
+  /Root 1 0 R</code></pre></div>
+						</div>
+						<aside class="notes">
+							<ul>
+								<li>header - PDF Version</li>
+								<li>body - Where all the pages and various other primitive objects are defined e.g. (booleans, numbers, arrays, ...)</li>
+								<li>xref Table - A lookup table to quickly find object locations relative to the beginning of the file. <br>Why some PDFs are so slow since this is located at the end of the file.</li>
+								<li>trailer - Pointers to various things such as the document root.</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						tree structure
+						<iframe src="assets/browser/index.html?file=../tracemonkey.pdf" class="stretch"></iframe>
+						http://brendandahl.github.io/pdf.js.utils/browser/index.html
+					</section>
+					<section>
+						<h2>page stream</h2>
+						<aside class="notes">Seen some actual pdf we'll continue on the timeline</aside>
+						<img src="assets/page.png">
+						<!-- TODO maybe break it up and put in text -->
+					</section>
+					<section>
+						<h1>watch a page draw</h1>
+						<aside class="notes">Debugging tool in pdf.js</aside>
+					</section>
+				</section>
+				<section>
+					<section><h1>time goes by...</h1><aside class="notes">DRINK</aside></section>
+					<section><img src="assets/update.png"></section>
+					<section><img src="assets/update.png"></section>
+					<section><h1>.</h1><h1>.</h1><h1>.</h1></section>
+					<section><img src="assets/update.png"></section>
+				</section>
+
+				<section>
+					<section>
+						<h1>2011</h1>
+						<h2>firefox 4 launches</h2>
+						<h2>pdf.js is created</h2>
+						<center>
+							<table>
+								<tr>
+									<td>Andreas Gal</td>
+									<td>Chris Jones</td>
+								</tr>
+								<tr>
+									<td><img src="assets/gal.jpg" width="200"></td>
+									<td><img src="assets/jones.jpg"></td>
+								</tr>
+							</table>
+						</center>
+						<aside class="notes">
+							Killing time while traveling.
+						</aside>
+					</section>
+					<section>
+						<h1>why?</h1>
+						<aside class="notes">
+							Common question we get.
+						</aside>
+					</section>
+					<section>
+						<h2>security</h2>
+						<p>
+							<img style="border: 0 none;" src="assets/security.png">
+						</p>
+						<aside class="notes">
+							<ul>
+								<li>Everyones probably seen update dialog from acrobat</li>
+								<li>Acrobat has been up there with with java for number of exploits</li>
+								<li>Other Viewers.</li>
+								<li>Chrome sandboxes their pdf viewer, but it's a large proprietary binary.</li>
+								<li>Well tested secure html5 apis</li>
+								<li>Less native code</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<h1>user</h1><h1>experience</h1>
+						<aside class="notes">
+							<ul>
+								<li>Pain Point</li>
+								<li>Open new window</li>
+								<li>Focus changes</li>
+								<li>Keyboard shortcuts aren't the same</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<h1>performance</h1>
+						<span class="fragment">
+							<h2 class="contrast">What's in a PDF?</h2>
+							<p>text, images, vector graphics</p>
+						</span>
+						<aside class="notes">
+							<ul>
+								<li>Joke?</li>
+								<li>CLICK</li>
+								<li>Step back....What is PDF (TEXT, IMAGES, VECTOR GRAPHICS)</li>
+								<li>What are browser fast at?</li>
+								<li>Loading Time</li>
+								<li>JS Engines</li>
+								<li>GPU Accelerated Canvas</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<h2>push the limits</h2>
+						<img src="assets/HTML5_1Color_Black.svg" style="opacity: .6;">
+						<aside class="notes">
+							<ul>
+								<li>The web is the platform</li>
+								<li>Build rich, performant apps</li>
+								<li>FirefoxOS Phones</li>
+								<li>Find performance bottlenecks</li>
+							</ul>
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section><h1>pdf.js</h1>
+						<aside class="notes">Let's start talking about pdf.js...DRINK</aside>
+					</section>
+					<section>
+						<h1>DEMO</h1>
+						<aside class="notes">
+							<ul>
+								<li>before we dive into the guts of pdf.js lets see it</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<iframe src="assets/pdf.js/web/viewer.html?file=../../demo.pdf" width="100%" height="600px"></iframe>
+						<aside class="notes">
+							<ul>
+								<li>Common things</li>
+								<li>Thumbnails</li>
+								<li>Table of Contents</li>
+								<li>Text selection</li>
+								<li>Not a minimal UI but not overbearing</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<h2>grab the bytes</h2>
+						XHR2 Makes this Easy
+<pre><code>// prepare server request
+var xhr = new XMLHttpRequest();
+xhr.open('GET', url);
+xhr.responseType = 'arraybuffer';
+xhr.onload = function() {
+  var buffer = xhr.response; // buffer is ArrayBuffer
+};
+xhr.send(null);</code></pre>
+						<aside class="notes">Dive into pdf.js, first is getting data.</aside>
+					</section>
+					<section>
+						<h2>parsing &amp; extracting</h2>
+						relatively easy
+						<aside class="notes">
+							<ol>
+								<li>(flate, png predictors, LZW)</li>
+								<li>(RC4, AES)</li>
+								<li>not supported</li>
+								<li>written in JS</li>
+								<li>parsing is straight forward(for good pdfs)</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h2>drawing on canvas</h2>
+						<h4>most commands map nicely to canvas</h4>
+						<ul style="width: 100%">
+							<li>'2 3 m' => <pre><code>ctx.moveTo(2, 3);</code></pre></li>
+							<li>'4 5 10 10 re' => <pre><code>ctx.rect(4, 5, 10, 10);</code></pre></li>
+							<li>...</li>
+						</ul>
+						<aside class="notes">
+							<strong>how many have used canvas?</strong>
+						</aside>
+					</section>
+					<section>
+						<h2>drawing on canvas</h2>
+						<h4>some did <b class="contrast">not</b>, so we're working on adding them to the canvas spec:</h4>
+						<table>
+							<tr>
+								<td style="text-align: center"><img src="assets/dash.png"></td>
+								<td style="vertical-align: middle;">dashed lines</td>
+							</tr>
+							<tr>
+								<td style="text-align: center"><img src="assets/fill_rule.png" height="100px"></td>
+								<td style="vertical-align: middle;">even odd fill</td>
+							</tr>
+							<tr>
+								<td style="text-align: center"><img height="100px" src="assets/blend.png"></td>
+								<td style="vertical-align: middle;">extended blend modes</td>
+							</tr>
+							<tr>
+								<td style="text-align: center"><img height="100px" src="assets/softmask.png"></td>
+								<td style="vertical-align: middle;">masks</td>
+							</tr>
+						</table>
+					</section>
+					<section>
+						<h2>more content</h2>
+						<aside class="notes">So now we have all that what else do we need to do?</aside>
+					</section>
+					<section>
+						<h1>images</h1>
+						<h2>PDF supports every image format known to man kind</h2>
+						<aside class="notes">Unfortunately the browser does not.</aside>
+					</section>
+					<section>
+						<h2>image decoding extraordinaire</h2>
+						<h3>Yury Delendik</h3>
+						<img src="assets/yury.jpg" width="200px">
+						<p>jpg.js, jpx.js, jbig2.js<p/>
+						<aside class="notes">Luckily I've got great colleagues such as Yury. </aside>
+					</section>
+					<section>
+						<h1>fonts</h1>
+						<h2>PDF also supports every font format known to man kind</h2>
+					</section>
+					<section>
+						<img src="assets/fonts_flow.jpg">
+						<aside class="notes">
+							<ul>
+								<li>Type 3 = (mini PDFs)</li>
+								<li>Modern browser protect you</li>
+								<li>How do we support this in the browser?</li>
+							</ul>
+							This is one of the larger pieces of code in pdf.js and continues to be problematic.
+						</aside>
+					</section>
+					<section>
+						<h3>more than just fonts, images:</h3>
+						<table>
+							<tr>
+								<td>
+									 <img src="assets/gradient.png" width="200px">
+								</td>
+								<td style="vertical-align: middle;">
+									Patterns: Tiling & Gradients
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<table>
+										<tr>
+											<td style="width: 100px; height: 100px; background-color:cyan; vertical-align: middle; text-align: center; padding: 0;">C</td>
+											<td style="width: 100px; height: 100px; background-color:magenta; vertical-align: middle; text-align: center; padding: 0;">M</td>
+										</tr>
+										<tr>
+											<td style="width: 100px; height: 100px; background-color:yellow; vertical-align: middle; text-align: center; padding: 0;">Y</td>
+											<td style="width: 100px; height: 100px; background-color:black; color: white; vertical-align: middle; text-align: center;  padding: 0;">K</td>
+										</tr>
+									</table>
+								</td>
+								<td>Colorspaces</td>
+							</tr>
+							<tr>
+								<td style="width: 200px; height: 100px; text-align: center; vertical-align: middle; border:padding: 0">f(x) => y</td>
+								<td style="vertical-align: middle;">Functions</td>
+							</tr>
+						</table>
+						<aside class="notes">
+							<ul>
+								<li>Several map well, most not used commonly.</li>
+								<li>Build colors in different ways such as grey scale, CMYK, ICC Color profiles...</li>
+								<li>Some are simple, one type is actually a subset of PostScript</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<h2>Overview</h2>
+						<img src="assets/rendering.png"><small>[1]</small>
+						<aside class="notes">
+							<ol>
+								<li>Parse the PDF with JS (relatively simple).</li>
+								<li>
+									Extract the objects (more complicated)
+									<ul>
+										<li>Streams are usually compressed</li>
+									</ul>
+								</li>
+								<li>
+									Convert page object's drawing commands to commands supported by canvas.
+								</li>
+							</ol>
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>august 2011</h1>
+						<h2>we have a pdf viewer</h2>
+						<h2>(kind of)</h2>
+						<aside class="notes">
+							<ol>
+								<li>Things are working pretty well.</li>
+								<li>What else do we have to do?</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h2>text selection</h2>
+						<img src="assets/text_selection.png">
+						<aside class="notes">
+							<ul>
+								<li>Overlay</li>
+								<li>Characters can be drawn in any order any where on the page.</li>
+								<li>Hard to line up divs.</li>
+								<li>Glyphs can be laid out letter by letter.</li>
+								<li>We get accessibility for free.</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<h3>text is <span class="fragment highlight-red">really</span> hard</h3>
+						<ul>
+							<!-- TODO ligature picture -->
+							<li class="fragment">a letter isn't just a letter. <p><img src="assets/glyphs.png" style="vertical-align: middle;"> => ababab</p>
+								<table class="fragment">
+									<tr>
+										<td>Char Code</td>
+										<td>Glyph</td>
+										<td>Text</td>
+									</tr>
+									<tr>
+										<td style="text-align: center;">0x66</td>
+										<td style="text-align: center;">&#64257;</td>
+										<td style="text-align: center;">'f' 'i'</td>
+									</tr>
+								</table>
+							</li>
+							<li class="fragment">not all fonts have proper unicode values.</li>
+							<li class="fragment">Left to Right, Right to Left.</li>
+						</ul>
+					</section>
+					<section>
+						<h1>janky scrolling</h1>
+					</section>
+					<section>
+						<h1>do as much as possible in workers</h1>
+						<img src="assets/worker.png"><small>[2]</small>
+						<aside class="notes">
+							<ol>
+								<li><strong>how many have used workers?</strong></li>
+								<li>no DOM</li>
+								<li>message passing</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h1>setTimeout</h1>
+						<aside class="notes">
+							<ol>
+								<li>Use setTimeout to not block UI.</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h1>prioritize</h1>
+					</section>
+				</section>
+
+				<section>
+					<section data-background="assets/nightly.png">
+						<h1>april 2012</h1>
+						<h2>pdf.js lands in firefox nighly v14</h2>
+						<aside class="notes">
+							we made it
+						</aside>
+					</section>
+					<section>
+						<h1>not done yet</h1>
+						<aside class="notes">
+							<ol>
+								<li>printing</li>
+								<li>find integration</li>
+								<li>bug fixes</li>
+							</ol>
+						</aside>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h1>january 2013</h1>
+						<img src="assets/ion.jpg" width="300px" alt="ion monkey">
+						<aside class="notes">
+							performance boost
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section data-background="assets/firefox.png">
+						<h1>february 2013</h1>
+						<h2>pdf.js makes it to firefox stable!</h2>
+						<aside class="notes"></aside>
+					</section>
+					<section>
+						<h1>still not done</h1>
+						<aside class="notes">not sure we ever will be</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>the present</h1>
+						<aside class="notes">What have we done since february</aside>
+					</section>
+					<section>
+						<h1>tons of bug fixes</h1>
+						<aside class="notes">
+							over 3k issues closed
+						</aside>
+					</section>
+					<section>
+						<h1>range request loading</h1>
+						<aside class="notes">
+							<ol>
+								<li>Mack Duan intern implemented</li>
+								<li>xhr range requests</li>
+								<li>async complexities</li>
+								<li>modified version of pdf.js</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h1>incremental rendering</h1>
+					</section>
+					<section>
+						<h2>status</h2>
+						<ul>
+							<li class="fragment">supports the majority of common PDF features</li>
+							<li class="fragment">renders many PDFs quickly</li>
+							<li class="fragment">works in Firefox, Chrome, IE9+, Opera, Safari</li>
+							<li class="fragment">chrome extension (290K users)</li>
+							<li class="fragment" style="font-size: 1.5em"><a href="https://blog.mozilla.org/futurereleases/2013/01/11/mozilla-tests-a-built-in-secure-pdf-viewer-in-firefox-beta-leveraging-the-power-of-html5/">Default PDF viewer in Firefox</a></li><!-- TODO insert FF logo -->
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h1>the future</h1>
+						<aside class="notes">
+							<ol>
+								<li>forms and javascript</li>
+								<li>soft mask</li>
+								<li>better text extraction</li>
+								<li>performance</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h1>lessons learned</h1>
+						<ul>
+							<li class="fragment">plan for asynchronous operations</li>
+							<li class="fragment">do as much possible in the worker(s)</li>
+							<li class="fragment">unit test</li>
+							<li class="fragment">be defensive</li>
+						</ul>
+						<aside class="notes">
+							If you want to build a viewer...
+							<ul>
+								<li>we didn't</li>
+								<li>talked about earlier</li>
+								<li>start early, even if prototype</li>
+								<li>really more for a viewer</li>
+						</aside>
+					</section>
+					<section>
+						<h1>help us!</h1>
+						<a href="https://github.com/mozilla/pdf.js">github.com/mozilla/pdf.js</a>
+						<p>@pdfjs</p>
+						<aside class="notes">
+							<ol>
+								<li>We're truly an open project, public meetings, on github</li>
+								<li>mentored bugs</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h1>thanks</h1>
+						<aside class="notes">Questions!</aside>
+					</section>
+					<section>
+						<h1>questions?</h1>
+						<br>
+						<br>
+						<p><small>
+							References:
+							<br>
+							[1] <a href="https://people.mozilla.com/~cjones/PDF.js-mozilla-vision-japan-2012.pdf">Chris Jones' Presentation</a>
+							<br>
+							[2] <a href="http://people.mozilla.com/~ydelendik/pdfjs-ttf-2012.pdf">Yury Delendik's Presentation</a> <br>
+							[3] <a href="http://www.flickr.com/photos/icathing/26603225/sizes/l/in/photolist-3mmdi-6Z1TiM-83udJP-588ZT-bhcaYp-ADRFk-dar1vE-59eABh-cAjg5j-9HpPPf-7HVhJ7-dCeaPT-9k99QA-9FwWBh-6GH7N8-aGfZNK-91kLA-cErEGJ-7g2Fzu-4XWrsd-dDq1bb-5Xrkf-GAUWx-6ZTBNd-5AUZgz-2wBXE-dhpHk-gSrDS-H9dZH-55Cyej-8vFmxC-4BXb6w-8yK6P3-iLV83-brxxCy-a7kPYg-a7kPF2-a7kP56-a7kQjZ-a7oEBQ-a7oGRG-9sWaC-4E3Mpg-5Mg7d-8yFQw2-8yFCu4-sCuH8-8yK9ES-8yFWEi-8yFTdi-8yK4jh/">Car Pic</a><br>
+							[4] <a href="http://en.wikipedia.org/wiki/Portable_Document_Format">Wiki PDF</a>
+						</small></p>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+					// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
